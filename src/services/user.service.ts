@@ -8,12 +8,13 @@ export class UserService {
 
     const user = await UserModel
       .findById(userId)
-      .select("name avatar biography friends")
+      .select("username realName avatar biography friends")
 
     if (!user) throw new UserNotFoundError()
 
     return {
-      name: user.name,
+      username: user.username,
+      realName: user.realName,
       avatar: user.avatar,
       biography: user.biography,
       friendsLength: user.friends?.length ?? 0,
