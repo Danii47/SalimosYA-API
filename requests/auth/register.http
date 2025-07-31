@@ -1,0 +1,62 @@
+# REGISTER USER
+
+### FAILURE: No data provided
+POST http://localhost:4700/auth/register
+Content-Type: application/json
+
+{
+
+}
+
+
+
+### FAILURE: Invalid email format
+POST http://localhost:4700/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "invalid-email",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+
+
+
+### FAILURE: Passwords do not match
+POST http://localhost:4700/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "confirmPassword": "password12"
+}
+
+
+
+### FAILURE: Password too short
+POST http://localhost:4700/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "pass",
+  "confirmPassword": "pass"
+}
+
+
+
+### SUCCESS: User registered successfully
+POST http://localhost:4700/api/auth/register
+Content-Type: application/json
+
+{
+  "realName": "Arià Aragón",
+  "username": "aria.aragon",
+  "email": "test2@example.com",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
