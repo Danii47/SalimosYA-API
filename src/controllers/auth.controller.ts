@@ -2,12 +2,13 @@ import { Request, Response } from "express"
 import { AuthService } from "../services/auth.service"
 import { UserAlreadyExistsError } from "../errors/UserAlreadyExistsError"
 import { InvalidCredentialsError } from "../errors/InvalidCredentialsError"
-import { ACCESS_JWT_EXPIRATION_SECONDS, NODE_ENV, REFRESH_JWT_EXPIRATION_SECONDS, SECRET_ACCESS_JWT_KEY, SECRET_REFRESH_JWT_KEY } from "../config/globalConfig"
+import { ACCESS_JWT_EXPIRATION_SECONDS, COOKIE_SAME_SITE, NODE_ENV, REFRESH_JWT_EXPIRATION_SECONDS, SECRET_ACCESS_JWT_KEY, SECRET_REFRESH_JWT_KEY } from "../config/globalConfig"
 import jwt from "jsonwebtoken"
 import { RefreshTokenModel } from "../models/refreshToken.model"
 import { RequestWithUser } from "../types/custom-request"
 import { UserModel } from "../models/user.model"
 import { EmailAlreadyExistsError } from "../errors/EmailAlreadyExistsError"
+import { CookieSameSite } from "../types/cookies-types"
 
 export class AuthController {
   static async login(req: Request, res: Response) {
@@ -45,13 +46,13 @@ export class AuthController {
         .cookie("access_token", accessToken, {
           httpOnly: true,
           secure: NODE_ENV === "production",
-          sameSite: "lax",
+          sameSite: COOKIE_SAME_SITE as CookieSameSite,
           maxAge: ACCESS_JWT_EXPIRATION_SECONDS * 1000 // Convert to milliseconds
         })
         .cookie("refresh_token", refreshToken, {
           httpOnly: true,
           secure: NODE_ENV === "production",
-          sameSite: "lax",
+          sameSite: COOKIE_SAME_SITE as CookieSameSite,
           maxAge: REFRESH_JWT_EXPIRATION_SECONDS * 1000 // Convert to milliseconds
         })
         .end()

@@ -1,7 +1,8 @@
 import { Response, NextFunction } from "express"
 import { RequestWithUser } from "../types/custom-request"
-import { ACCESS_JWT_EXPIRATION_SECONDS, NODE_ENV, SECRET_ACCESS_JWT_KEY, SECRET_REFRESH_JWT_KEY } from "../config/globalConfig"
+import { ACCESS_JWT_EXPIRATION_SECONDS, COOKIE_SAME_SITE, NODE_ENV, SECRET_ACCESS_JWT_KEY, SECRET_REFRESH_JWT_KEY } from "../config/globalConfig"
 import jwt from "jsonwebtoken"
+import { CookieSameSite } from "../types/cookies-types"
 
 export default function attachUserToRequest(req: RequestWithUser, res: Response, next: NextFunction) {
   const accessToken = req.cookies.access_token
@@ -25,7 +26,7 @@ export default function attachUserToRequest(req: RequestWithUser, res: Response,
       res.cookie("access_token", newAccessToken, {
         httpOnly: true,
         secure: NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: COOKIE_SAME_SITE as CookieSameSite,
         maxAge: ACCESS_JWT_EXPIRATION_SECONDS * 1000 // Convert seconds to milliseconds
       })
 
