@@ -9,24 +9,26 @@ export class MeService {
     if (!user) throw new UserNotFoundError()
 
     return {
-      name: user.name,
+      username: user.username,
+      realName: user.realName,
       friendRequestsLength: user.friendRequests?.length ?? 0,
       friendsLength: user.friends?.length ?? 0,
       avatar: user?.avatar
     }
   }
 
-  static async updateUserInfo({ userId, name, biography, avatar }: { userId: Types.ObjectId, name?: string, biography?: string, avatar?: string }) {
+  static async updateUserInfo({ userId, username, realName, biography, avatar }: { userId: Types.ObjectId, username?: string, realName?: string, biography?: string, avatar?: string }) {
     const user = await UserModel.findByIdAndUpdate(
       userId,
-      { name, biography, avatar },
+      { username, realName, biography, avatar },
       { new: true }
     )
 
     if (!user) throw new UserNotFoundError()
 
     return {
-      name: user.name,
+      username: user.username,
+      realName: user.realName,
       biography: user.biography,
       avatar: user.avatar
     }
