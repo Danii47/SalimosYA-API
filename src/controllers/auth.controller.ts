@@ -18,8 +18,8 @@ export class AuthController {
     const ipAddress = req.ip
 
     try {
-      const userId = await AuthService.login({ email, password })
-      const refreshTokenDoc = await RefreshTokenModel.findOne({ userId, userAgent, ipAddress })
+      const user = await AuthService.login({ email, password })
+      const refreshTokenDoc = await RefreshTokenModel.findOne({ userId: user._id, userAgent, ipAddress })
       let tokenId: string
 
       if (refreshTokenDoc) {
@@ -27,18 +27,18 @@ export class AuthController {
       } else {
         tokenId = crypto.randomUUID()
         await RefreshTokenModel.create({
-          userId,
+          userId: user._id,
           tokenId,
           userAgent,
           ipAddress,
         })
       }
 
-      const accessToken = jwt.sign({ userId }, SECRET_ACCESS_JWT_KEY, {
+      const accessToken = jwt.sign({ userId: user._id }, SECRET_ACCESS_JWT_KEY, {
         expiresIn: ACCESS_JWT_EXPIRATION_SECONDS
       })
 
-      const refreshToken = jwt.sign({ userId, tokenId }, SECRET_REFRESH_JWT_KEY, {
+      const refreshToken = jwt.sign({ userId: user._id, tokenId }, SECRET_REFRESH_JWT_KEY, {
         expiresIn: REFRESH_JWT_EXPIRATION_SECONDS
       })
 
@@ -55,7 +55,7 @@ export class AuthController {
           sameSite: COOKIE_SAME_SITE as CookieSameSite,
           maxAge: REFRESH_JWT_EXPIRATION_SECONDS * 1000 // Convert to milliseconds
         })
-        .end()
+        .json({ user })
 
     } catch (error) {
       if (error instanceof InvalidCredentialsError) {

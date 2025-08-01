@@ -7,14 +7,21 @@ import { InvalidCredentialsError } from "../errors/InvalidCredentialsError"
 import { EmailAlreadyExistsError } from "../errors/EmailAlreadyExistsError"
 
 export class AuthService {
-  static async login({ email, password }: { email: string, password: string }): Promise<Types.ObjectId> {
+  static async login({ email, password }: { email: string, password: string }) {
     const user = await UserModel.findOne({ email })
     if (!user) throw new InvalidCredentialsError()
 
     const isValidPassword = await bcrypt.compare(password, user.password)
     if (!isValidPassword) throw new InvalidCredentialsError()
 
-    return user._id
+    return {
+      _id: user._id,
+      realName: user.realName,
+      username: user.username,
+      biography: user.biography,
+      email: user.email,
+      avatar: user.avatar
+    }
   }
 
   static async register({ email, password, username, realName }: { email: string, password: string, username: string, realName: string }): Promise<Types.ObjectId> {
