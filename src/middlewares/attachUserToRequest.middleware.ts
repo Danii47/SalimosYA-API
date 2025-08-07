@@ -7,7 +7,7 @@ import { CookieSameSite } from "../types/cookies-types"
 export default function attachUserToRequest(req: RequestWithUser, res: Response, next: NextFunction) {
   const accessToken = req.cookies.access_token
   const refreshToken = req.cookies.refresh_token
-  console.log(req.url)
+
   req.session = { userId: null }
 
   try {
