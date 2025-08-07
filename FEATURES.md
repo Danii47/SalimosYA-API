@@ -19,5 +19,3 @@
 
 
 TODO: Implement the view of locals without being logged in (not relevant info, to view the people ammount it will be necessary to be logged in)
-TODO: Real name and username (username is unique, real name is not)
-TODO: Comprobate unique username and email in the register endpoint error
