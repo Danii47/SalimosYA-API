@@ -9,7 +9,7 @@ export interface IRefreshToken extends Document {
   ipAddress: string;
 }
 
-const refresTokenSchema = new Schema<IRefreshToken>({
+const refreshTokenSchema = new Schema<IRefreshToken>({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   tokenId: { type: String, required: true },
   createdAt: { type: Date, default: Date.now, expires: "365d" },
@@ -17,4 +17,4 @@ const refresTokenSchema = new Schema<IRefreshToken>({
   ipAddress: { type: String, required: true }
 })
 
-export const RefreshTokenModel = model<IRefreshToken>("RefreshToken", refresTokenSchema)
+export const RefreshTokenModel = model<IRefreshToken>("RefreshToken", refreshTokenSchema)
